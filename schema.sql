@@ -6,10 +6,7 @@ CREATE TYPE user_role AS ENUM ('admin', 'user');
 -- Création des tables
 CREATE TABLE groupe (
     groupID SERIAL PRIMARY KEY,
-    name VARCHAR(25) NOT NULL,
-    user_id INT,
-        FOREIGN KEY(uuser_id) 
-        REFERENCES utilisateur(user_id)
+    nom VARCHAR(25) NOT NULL 
 );
 
 CREATE TABLE utilisateur(
@@ -19,6 +16,8 @@ CREATE TABLE utilisateur(
     email VARCHAR(255) UNIQUE NOT NULL,
     mot_de_passe VARCHAR(100) NOT NULL,
     role user_role NOT NULL ,
+    groupe_id INTEGER ,
+    FOREIGN KEY(groupe_id)REFERENCES groupe(groupID),
     date_creation TIMESTAMP DEFAULT NOW()
 );
 
@@ -28,10 +27,12 @@ CREATE TABLE Prompt (
     texte VARCHAR(50) NOT NULL,
     statut varchar(10) NOT NULL,
     prix DECIMAL(10, 2) NOT NULL DEFAULT 1000.00,
+    id_user int,
+    FOREIGN KEY (id_user) REFERENCES utilisateur(id_user),
     date_creation TIMESTAMP DEFAULT NOW(),
     date_modification TIMESTAMP
 );
-
+drop table prompt CASCADE;
 CREATE TABLE vote (
     id_vote  serial PRIMARY KEY,
     voteValue INT NOT NULL,
@@ -53,3 +54,8 @@ CREATE TABLE note (
         FOREIGN KEY(id_prompt) ON DELETE CASCADE,
         REFERENCES Prompt(id_prompt)
 );
+
+SELECT * from prompt;
+select nom_user,prenom,email,role from utilisateur ;
+INSERT INTO utilisateur(nom_user, prenom, email, mot_de_passe,role,groupe_id)
+            VALUES ('fall','fatou','fall@gmail.com','1234567','user',5);
